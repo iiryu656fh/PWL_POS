@@ -11,6 +11,6 @@ class UserController extends Controller
     {
         // coba alses model UserModel
         $user = UserModel::all(); // ambil semua data dari tabel m_user
-        return view('user', ['data' => $user]);
+        return view('user', ['user' => $user]);
     }
 }
