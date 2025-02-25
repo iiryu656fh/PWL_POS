@@ -12,17 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('m_user', function (Blueprint $table) {
-            //
+            $table->id('user_id');
+            $table->unsignedBigInteger('level_id')->index(); // indexing untuk foreignkey
+            $table->string('username', 20)->unique(); // unique untuk memastikan tidak ada username yang sama
+            $table->string('nama', 100);
+            $table->string('password');
+            $table->timestamps();
+
+            // mendefinisikan foreign key pada kolom level_id mengacu pada kolom level_id pada tabel m_level
+            $table->foreign('level_id')->references('level_id')->on('m_level');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    // Reverse the migrations.
     public function down(): void
     {
-        Schema::table('m_user', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('m_user');
     }
 };
