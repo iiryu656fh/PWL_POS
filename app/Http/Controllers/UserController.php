@@ -24,7 +24,7 @@ class UserController extends Controller
         // UserModel::create($data); // insert data user
         // // coba akses model UserModel
 
-        $user = UserModel::where('level_id', 1)-> first(); // ambil semua data dari tabel m_user
+        $user = UserModel::firstwhere('level_id', 1); 
         return view('user', ['data' => $user]);
     }
 }
