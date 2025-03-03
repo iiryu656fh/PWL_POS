@@ -24,12 +24,10 @@ class UserController extends Controller
         // UserModel::create($data); // insert data user
         // // coba akses model UserModel
 
-        $user = UserModel::firstOrCreate(
+        $user = UserModel::firstOrNew(
             [
-                'username' => 'manager22',
-                'nama' => 'Manager Dua Dua',
-                'password' => Hash::make('12345'),
-                'level_id' => 2
+                'username' => 'manager',
+                'nama' => 'Manager',
             ],
         );
         return view('user', ['data' => $user]);
