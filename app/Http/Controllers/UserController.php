@@ -24,7 +24,8 @@ class UserController extends Controller
         // UserModel::create($data); // insert data user
         // // coba akses model UserModel
 
-        $user = UserModel::where('username', 'manager9')->firstOrFail();
+        $user = UserModel::where('level_id', 2)->count();
+        dd($user);
         return view('user', ['data' => $user]);
     }
 }
