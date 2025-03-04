@@ -20,7 +20,7 @@
         <label>Level ID</label>
         <input type="text" name="level_id" placeholder="Masukkan ID Level">
         <br><br>
-        <input type="submit" class="btn btn-primary" value="Simpan">
+        <input type="submit" class="btn btn-success" value="Simpan">
     </form>
 </body>
 </html>
