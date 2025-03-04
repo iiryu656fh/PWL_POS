@@ -47,4 +47,12 @@ class UserController extends Controller
 
         return redirect('/user');
     }
+
+    public function hapus($user_id){
+        $user = UserModel::find($user_id);
+        $user->delete();
+        
+        return redirect('/user');
+    }
+    
 }
