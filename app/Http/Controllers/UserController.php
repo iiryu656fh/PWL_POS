@@ -34,4 +34,17 @@ class UserController extends Controller
         $user = UserModel::find($user_id);
         return view('user_ubah', ['data' => $user]);
     }
+
+    public function ubah_simpan(Request $request, $user_id){
+        $user = UserModel::find($user_id);
+
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        $user->password = Hash::make($request->password);
+        $user->level_id = $request->level_id;
+
+        $user->save();
+
+        return redirect('/user');
+    }
 }
