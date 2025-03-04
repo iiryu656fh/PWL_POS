@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Form Ubah Data User</h1>
-    <a href="user">Kembali</a>
+    <a href="{{ url('/user') }}">Kembali</a>
     <br><br>
 
     <form method="POST" action="{{ route('user.ubah_simpan', $data->user_id) }}">
