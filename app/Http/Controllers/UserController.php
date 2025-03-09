@@ -47,6 +47,22 @@ class UserController extends Controller
             ->make(true);
     }
 
+    // Menampilkan halaman form tambah user
+    public function create(){
+        $breadcrumb = (object) [
+            'title' => 'Tambah User',
+            'list' => ['Home', 'User', 'Tambah']
+        ];
+
+        $page = (object) [
+            'title' => 'Tambah user baru'
+        ];
+
+        $level = LevelModel::all(); // ambil data level untuk ditampilkan di form
+        $acttiveMenu = 'user'; // set menu yang aktif
+        return view('user.create', ['breadcrumb' => $breadcrumb, 'activeMenu' => $acttiveMenu, 'page' => $page, 'level' => $level]);
+    }
+
     // public function tambah()
     // {
     //     return view('user_tambah');
