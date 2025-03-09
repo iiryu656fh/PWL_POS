@@ -63,6 +63,26 @@ class UserController extends Controller
         return view('user.create', ['breadcrumb' => $breadcrumb, 'activeMenu' => $acttiveMenu, 'page' => $page, 'level' => $level]);
     }
 
+    public function store(Request $request){
+        $request->validate([
+            // Username harus diisi, berupa string, minimal 3 karakter, dan bernilai unik di tabel m_user kolom username
+            'username' => 'required|string|min:3|unique:m_user,username',
+            'nama' => 'required|string|max:100',  // Nama harus diisi, berupa string, dan maksimal 100 karakter
+            'password' => 'required|min:5', // Password harus diisi dan minimal 5 karakter
+            'level_id' => 'required|integer' // Level ID harus diisi dan berupa angka
+        ]);
+
+        UserModel::create([
+            'username' => $request->username,
+            'nama' => $request->nama,
+            'password' => bcrypt($request->password), //password dienkripsi sebelum disimpan
+            'level_id' => $request->level_id
+        ]);
+
+        return redirect('/user')->with('success', 'Data user berhasil disimpan');
+    }
+
+
     // public function tambah()
     // {
     //     return view('user_tambah');
