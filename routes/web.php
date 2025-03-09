@@ -29,7 +29,7 @@ use App\Models\User;
 
 Route::get('/', [WelcomeController::class, 'index']);
 
-Route::group(['prefix' => 'level'], function(){
+Route::group(['prefix' => 'user'], function(){
     Route::get('/', [UserController::class, 'index']); // menampilkan halaman awal user
     Route::post('/list', [UserController::class, 'list']); // menampilkan data user dalam bentuk json untuk datables
     Route::get('/create', [UserController::class, 'create']); // menampilkan halaman form tambah user

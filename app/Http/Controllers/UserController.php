@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\UserModel;
-use Illuminate\Support\Facades\Hash;
 use App\Models\LevelModel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -23,21 +22,22 @@ class UserController extends Controller
 
         $acttiveMenu = 'user'; // set menu yang aktif
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'activeMenu' => $acttiveMenu, 'page' => $page]);
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $acttiveMenu]);
         // $user = UserModel::with('level')->get();
         // return view('user', ['data' => $user]);
     }
 
+    // ambil data user dalam bentuk json untuk datatables
     public function list(Request $request){
-        $user = UserModel::select('user id', 'username', 'nama', 'level_id')->with('level');
+        $users = UserModel::select('user id', 'username', 'nama', 'level id')->with('level');
 
-        return DataTables::of($user)
+        return DataTables::of($users)
             // menambahkan kolom index / no urut (Default nama kolom: DT_RowIndex)
             ->addIndexColumn()
             ->addColmn('aksi', function($user){ //menambahkan kolom aksi
                 $btn = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a>';
                 $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a>';
-                $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/' . $user->user_id).'">'
+                $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/'.$user->user_id).'">'
                             . csrf_field() . method_field('DELETE') . 
                             '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah anda yakin menghapus data ini?\');
                             ">Hapus</button></form>';
@@ -60,7 +60,7 @@ class UserController extends Controller
 
         $level = LevelModel::all(); // ambil data level untuk ditampilkan di form
         $acttiveMenu = 'user'; // set menu yang aktif
-        return view('user.create', ['breadcrumb' => $breadcrumb, 'activeMenu' => $acttiveMenu, 'page' => $page, 'level' => $level]);
+        return view('user.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $acttiveMenu]);
     }
 
     public function store(Request $request){
@@ -81,7 +81,7 @@ class UserController extends Controller
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
     }
-
+}
 
     // public function tambah()
     // {
@@ -124,4 +124,3 @@ class UserController extends Controller
     //     return redirect('/user');
     // }
     
-}

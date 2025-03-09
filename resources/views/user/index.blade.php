@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="card-body">
-            <table class="table table-bordered table-striped table-hover table-sm" id="table-user">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
                 <thead>
                     <tr><th>ID</th><th>Username</th><th>Nama</th><th>Level Pengguna</th><th>Aksi</th></tr>
                 </thead>
