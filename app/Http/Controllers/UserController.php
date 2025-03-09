@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserModel;
 use Illuminate\Support\Facades\Hash;
+use App\Models\LevelModel;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
