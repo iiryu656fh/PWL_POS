@@ -23,10 +23,10 @@
                             <select class="form-control" id="level_id" name="level_id" required>
                                 <option value="">- Semua -</option>
                                 @foreach ($level as $item)
-                                    <option value="{{ $item->id }}">{{ $item->level_nama }}</option>
+                                    <option value="{{ $item->level_id}}">{{ $item->level_nama }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-text text-muted">level pengguna</small>
+                            <small class="form-text text-muted">Level pengguna</small>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                 ajax: {
                     "url": "{{ url('user/list') }}",
                     "dataType": "json",
-                    "type": "POST"
+                    "type": "POST",
                     "data": function(d) {
                         d.level_id = $('#level_id').val();
                     }
@@ -91,7 +91,7 @@
                 ]
             });
 
-            $('#level_id').on('change',function() {
+            $('#level_id').on('change', function() {
                 dataUser.ajax.reload();
             });
         });
