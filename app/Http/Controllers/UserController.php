@@ -22,7 +22,9 @@ class UserController extends Controller
 
         $acttiveMenu = 'user'; // set menu yang aktif
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $acttiveMenu]);
+        $level = LevelModel::all(); // ambil data level untuk ditampilkan di form
+
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $acttiveMenu]);
         // $user = UserModel::with('level')->get();
         // return view('user', ['data' => $user]);
     }
