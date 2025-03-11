@@ -134,6 +134,7 @@ class UserController extends Controller
         ]);
 
         return redirect('/user')->with('success', 'Data user berhasil diubah');
+    }
 }
 
     // public function tambah()
