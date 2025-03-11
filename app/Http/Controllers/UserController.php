@@ -28,22 +28,21 @@ class UserController extends Controller
     }
 
     // ambil data user dalam bentuk json untuk datatables
-    public function list(Request $request){
-        $users = UserModel::select('user id', 'username', 'nama', 'level id')->with('level');
-
+    public function list(Request $request) {
+        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+            ->with('level');
+    
         return DataTables::of($users)
-            // menambahkan kolom index / no urut (Default nama kolom: DT_RowIndex)
             ->addIndexColumn()
-            ->addColmn('aksi', function($user){ //menambahkan kolom aksi
-                $btn = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a>';
-                $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a>';
+            ->addColumn('aksi', function ($user) {
+                $btn = '<a href="'.url('/user/' .$user->user_id).'" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="'.url('/user/' .$user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> ';
                 $btn .= '<form class="d-inline-block" method="POST" action="'.url('/user/'.$user->user_id).'">'
-                            . csrf_field() . method_field('DELETE') . 
-                            '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah anda yakin menghapus data ini?\');
-                            ">Hapus</button></form>';
-                return $btn;        
+                     . csrf_field() . method_field('DELETE')
+                     . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah anda yakin menghapus data ini?\');">Hapus</button></form>';
+                return $btn; 
             })
-            ->rawColumns(['aksi']) //menandakan kolom tersebut adalah html
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 
@@ -80,6 +79,22 @@ class UserController extends Controller
         ]);
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
+    }
+
+    public function show(string $id) {
+        $user = UserModel::with('level')->find($id);
+        $breadcrumb = (object) [
+            'title' => 'Detail User',
+            'list' => ['Home', 'User', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail user'
+        ];
+
+        $acttiveMenu = 'user'; // set menu yang aktif
+
+        return view('user.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'user' => $user, 'activeMenu' => $acttiveMenu]);
     }
 }
 

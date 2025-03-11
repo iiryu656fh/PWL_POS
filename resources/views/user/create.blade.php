@@ -53,7 +53,7 @@
             <div class="form-group row">
                 <label class="col-1 control-label col-form-label"></label>
                 <div class="col-11">
-                    <buttom type="submit" class="btn btn-primary">Simpan</buttom>
+                    <button type="submit" class="btn btn-primary">Simpan</buttom>
                     <a class="btn btn-sm btn-default ml-1" href="{{ url('user') }}">Kembali</a>
                 </div>
             </div>

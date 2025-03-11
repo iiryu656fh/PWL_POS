@@ -24,13 +24,13 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            var dataUser = $('#table-user').DataTable({
+            var dataUser = $('#table_user').DataTable({
                 // Serverside: true, jika ingin menggunakan server side processing
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('user/list') }}",
                     "dataType": "json",
-                    "type": "POST",
+                    "type": "POST"
                 },
                 columns: [
                     {
@@ -47,7 +47,7 @@
                         //searchable: true, jika ingin kolom ini bisa dicari
                         searchable: true
                     }, {
-                        data: "name",
+                        data: "nama",
                         className: "",
                         orderable: true,
                         searchable: true
