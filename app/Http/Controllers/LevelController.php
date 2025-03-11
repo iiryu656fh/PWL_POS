@@ -120,7 +120,7 @@ class LevelController extends Controller
             'level_nama' => $request->level_nama
         ]);
 
-        return redirect('/level')->with('status', 'Data level berhasil diubah');
+        return redirect('/level')->with('success', 'Data level berhasil diubah');
     }
 
     public function destroy(string $id){

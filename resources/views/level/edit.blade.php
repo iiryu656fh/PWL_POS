@@ -36,7 +36,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="form-group row">component()
+                <div class="form-group row">
                     <label class="col-1 control-label col-form-label"></label>
                     <div class="col-11">
                         <button type="submit" class="btn btn-primary">Simpan</buttom>
