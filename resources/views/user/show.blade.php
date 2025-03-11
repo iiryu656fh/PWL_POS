@@ -8,7 +8,7 @@
         </div>
         <div class="card-body">
             @empty($user)
-                <div class="alert alert danger alert-dismissible">
+                <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang anda cari tidak ditemukan.
                 </div>
