@@ -158,6 +158,13 @@ class UserController extends Controller
             return redirect('/user')->with('error', 'Data user tidak bisa dihapus karena masih terdapat data yang terkait');
         }
     }
+
+    public function create_ajax(){
+        $level = LevelModel::select('level_id', 'level_nama')->get();
+
+        return view('user.create_ajax')
+        -> with('level', $level);
+    }
 }
 
     
