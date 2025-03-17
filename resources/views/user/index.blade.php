@@ -39,6 +39,8 @@
             </table>
         </div>
     </div>
+    <div id="myModal" class="modal fadde animare shake" tabindex="-1" role="dialog" data-backrop="static"
+     data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('css')
