@@ -30,8 +30,8 @@
     $(document).ready(function () {
         $("#form-tambah").validate({
             rules: {
-                level_kode: { required: true, minlength: 3 },
-                level_nama: { required: true}
+                level_kode: {required: true, maxlength: 3, pattern: /^[A-Z]+$/},
+                level_nama: {required: true, minlength: 3, maxlength: 50, pattern: /^[a-zA-Z]+$/}
             },
             submitHandler: function (form) {
                 $.ajax({

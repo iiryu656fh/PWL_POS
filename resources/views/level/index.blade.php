@@ -71,10 +71,6 @@
                     }
                 ]
             });
-
-            $('#level_id').change(function() {
-                dataLevel.ajax.reload();
-            });
         });
     </script>
 @endpush

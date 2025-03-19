@@ -23,7 +23,7 @@
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data Level</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data level</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -31,8 +31,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Kode Level</label>
-                    <input value="{{ $level->kode_level }}" type="text" name="kode_level" id="kode_level" class="form-control" required>
-                    <small id="error-kode_level" class="error-text form-text text-danger"></small>
+                    <input value="{{ $level->level_kode }}" type="text" name="level_kode" id="level_kode" class="form-control" required>
+                    <small id="error-level_kode" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Nama Level</label>
@@ -51,8 +51,8 @@
     $(document).ready(function() {
         $('#form-edit').validate({
             rules: {
-                level_kode: { required: true, minlength: 3 },
-                level_nama: { required: true}
+                level_kode: {required: true, maxlength: 3, pattern: /^[A-Z]+$/},
+                level_nama: {required: true, minlength: 3, maxlength: 50, pattern: /^[a-zA-Z]+$/}
             },
             submitHandler: function(form) {
                 $.ajax({
