@@ -231,16 +231,23 @@ class KategoriController extends Controller
     public function delete_ajax(Request $request, string $id) {
         if ($request->ajax() || $request->wantsJson()) {
             $kategori = KategoriModel::find($id);
-            if ($kategori) {
+            if (!$kategori) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data kategori tidak ditemukan'
+                ]);
+            }
+
+            try {
                 $kategori->delete();
                 return response()->json([
                     'status' => true,
                     'message' => 'Data kategori berhasil dihapus'
                 ]);
-            } else {
+            } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Data kategori tidak ditemukan'
+                    'message' => 'Data kategori gagal dihapus karena terdapat data yang terkait'
                 ]);
             }
         }

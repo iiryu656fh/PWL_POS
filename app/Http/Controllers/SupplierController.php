@@ -233,16 +233,23 @@ class SupplierController extends Controller
     public function delete_ajax(Request $request, string $id){
         if ($request->ajax() || $request->wantsJson()) {
             $supplier = SupplierModel::find($id);
-            if ($supplier) {
+            if (!$supplier) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+    
+            try {
                 $supplier->delete();
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data supplier berhasil dihapus'
+                    'message' => 'Data berhasil dihapus'
                 ]);
-            } else {
+            } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Data supplier tidak ditemukan'
+                    'message' => 'Data gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini'
                 ]);
             }
         }
