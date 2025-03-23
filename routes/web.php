@@ -18,6 +18,18 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [WelcomeController::class, 'index']);
+    // route Level
+
+    // Artinya semua route di dalam groupp ini harus punya role AD< (Amdinistrator)
+    Route::middleware(['authorizeUser:ADM'])->group(function () {
+        Route::get('/level', [LevelController::class, 'index']); // menampilkan halaman awal level
+        Route::post('/level/list', [LevelController::class, 'list']); // menampilkan data level dalam bentuk json untuk datables
+        Route::get('/level/create', [LevelController::class, 'create']); // menampilkan halaman form tambah level
+        Route::post('/level', [LevelController::class, 'store']); // menyimpan data level baru
+        Route::get('/level/{id}/edit', [LevelController::class, 'edit']); // menampilkan halaman form edit level
+        Route::put('/level/{id}', [LevelController::class, 'update']); // menyimpan data level yang diubah
+        Route::delete('/level/{id}', [LevelController::class, 'destroy']); // menghapus data level
+    });
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/', [UserController::class, 'index']); // menampilkan halaman awal user
