@@ -14,26 +14,31 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function postLogin(Request $request){
-        if($request->ajax() || $request->wantsJson()){
+    public function postLogin(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
             $credentials = $request->only('username', 'password');
 
-            if(Auth::attempt($credentials)){
+            if (Auth::attempt($credentials)) {
                 return response()->json([
-                    'status' => true,  
+                    'status' => true,
                     'message' => 'Login Berhasil',
                     'redirect' => url('/')
                 ]);
             } 
             
-            return response()->json(['status' => false, 'message' => 'Login Gagal']); 
+            return response()->json([
+                'status' => false,
+                'message' => 'Login Gagal'
+            ]);
         }
-        return redirect()->route('login');
+        return redirect('login');
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('login');
