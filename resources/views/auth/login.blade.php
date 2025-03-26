@@ -57,6 +57,7 @@
                         {{-- /.col --}}
                     </div>
                 </form>
+                <p class="mt-3 mb-1 text-center">Belum punya akun? <a href="{{ url('register') }}">Daftar Sekarang</a></p>
             </div>
             {{-- /.card-body --}}
         </div>
