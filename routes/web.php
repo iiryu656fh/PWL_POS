@@ -57,6 +57,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']); //untuk tampilkan form confirm delete user ajax
             Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']); // Untuk hapus data User Ajax
             Route::delete('/{id}', [LevelController::class, 'destroy']); // menghapus data level
+            Route::get('/import', [LevelController::class, 'import']); // ajax form uplaod excel
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax']); // ajax import excel
         });
     });
 
