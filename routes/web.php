@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']); //untuk tampilkan form confirm delete user ajax
             Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']); // Untuk hapus data User Ajax
             Route::delete('/{id}', [UserController::class, 'destroy']); // menghapus data user
+            Route::get('/import', [UserController::class, 'import']); // ajax form uplaod excel
+            Route::post('/import_ajax', [UserController::class, 'import_ajax']); // ajax import excel
         });
     });
 

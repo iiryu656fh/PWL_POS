@@ -7,6 +7,8 @@ use App\Models\UserModel;
 use App\Models\LevelModel;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UserController extends Controller
 {
@@ -284,6 +286,73 @@ class UserController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'Data gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini'
+                ]);
+            }
+        }
+        return redirect('/');
+    }
+
+    public function import() {
+        return view('user.import');
+    }
+
+    public function import_ajax(Request $request) {
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_user' => 'required|mimes:xlsx,xls|max:1024'
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+            try {
+                $file = $request->file('file_user');
+
+                $reader = IOFactory::createReader('Xlsx');
+                $reader->setReadDataOnly(true);
+                $spreadsheet = $reader->load($file->getRealPath());
+                $sheet = $spreadsheet->getActiveSheet();
+
+                $data = $sheet->toArray(null, false, true, true);
+
+                $insert = [];
+                if (count($data) > 1) {
+                    foreach ($data as $baris => $value) {
+                        if ($baris > 1) {
+                            $insert[] = [
+                                'level_id' => $value['A'],
+                                'username' => $value['B'],
+                                'nama' => $value['C'],
+                                'password' => Hash::make($value['D']),
+                                'created_at' => now()
+                            ];
+                        }
+                    }
+                    if (count($insert) > 0) {
+                        UserModel::insertOrIgnore($insert);
+                    }
+
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data berhasil diimport'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data tidak ditemukan'
+                    ]);
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data gagal diimport, silahkan coba lagi'
                 ]);
             }
         }
