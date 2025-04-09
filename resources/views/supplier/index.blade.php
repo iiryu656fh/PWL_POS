@@ -2,23 +2,34 @@
 
 @section('content')
     <div class="card card-outline card-primary">
-        <div class="card-header">
-            <h3 class="card-title">{{ $page->title }}</h3>
-            <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('supplier/create') }}">Tambah</a>
-                <button onclick="modalAction('{{ url('supplier/create_ajax')}}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">{{ $page->title }}</h3>
+                <div class="card-tools">
+                    <button onclick="modalAction('{{ url('supplier/import') }}')" class="btn btn-sm btn-info mt-1">Import
+                        Supplier</button>
+                    <a class="btn btn-sm btn-primary mt-1" href="{{ url('supplier/create') }}">Tambah</a>
+                    <button onclick="modalAction('{{ url('supplier/create_ajax')}}')"
+                        class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+                </div>
             </div>
         </div>
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
-            @if (session ('error'))
+            @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
             <table class="table table-bordered table-striped table-hover table-sm" id="table_supplier">
                 <thead>
-                    <tr><th>ID</th><th>Kode supplier</th><th>Nama supplier</th><th>Alamat Supplier</th><th>Aksi</th></tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kode supplier</th>
+                        <th>Nama supplier</th>
+                        <th>Alamat Supplier</th>
+                        <th>Aksi</th>
+                    </tr>
                 </thead>
             </table>
         </div>
@@ -33,12 +44,12 @@
 @push('js')
     <script>
         function modalAction(url = '') {
-            $('#myModal').load(url, function() {
+            $('#myModal').load(url, function () {
                 $('#myModal').modal('show');
             });
         }
         var dataSupplier
-        $(document).ready(function() {
+        $(document).ready(function () {
             dataSupplier = $('#table_supplier').DataTable({
                 // Serverside: true, jika ingin menggunakan server side processing
                 serverSide: true,

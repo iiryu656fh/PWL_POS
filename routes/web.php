@@ -123,6 +123,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']); //untuk tampilkan form confirm delete user ajax
             Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']); // Untuk hapus data User Ajax
             Route::delete('/{id}', [SupplierController::class, 'destroy']); // menghapus data supplier
+            Route::get('/import', [SupplierController::class, 'import']); // ajax form uplaod excel
+            Route::post('/import_ajax', [SupplierController::class, 'import_ajax']); // ajax import excel
         });
     });
 });
