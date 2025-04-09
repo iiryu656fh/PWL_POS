@@ -1,6 +1,6 @@
 <form action="{{ url('/barang/import_ajax') }}" method="POST" id="form-import" enctype="multipart/form-data">
     @csrf
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+    <div id="myModal" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Import Data Barang</h5>
@@ -31,7 +31,7 @@
     $(document).ready(function() {
         $("#form-import").validate({
             rules: {
-                file_barang: {required: true, extension: "xlsx"},
+                file_barang: {required: true, extension: "xlsx, xls"},
             },
             submitHandler: function(form){
                 var formData = new FormData(form); // jadikan form ke formdata untuk menghandle file
@@ -42,14 +42,14 @@
                     contentType: false,     // setting processData dan contentType kr false untuk menghandle file
                     processData: false,
                     success: function(response) {
-                        if (response.status == 'success') {
-                            $('#modal-master').modal('hide');
+                        if (response.status == true) {
+                            $('#myModal').modal('hide');
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
                                 text: response.message,
-                            });
-                            tableBarang.ajax.reload(); // reload DataTable
+                            })
+                            dataBarang.ajax.reload(); // reload DataTable
                         } else { // jika error-file_barang
                             $('.error-text').text('');
                             $.each(response.msgField, function(prefix, val) {

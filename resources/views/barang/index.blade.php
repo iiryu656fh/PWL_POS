@@ -41,7 +41,7 @@
                 @if (session('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
-                <table class="table table-bordered table-striped table-hover table-sm" id="table_barang">
+                <table class="table table-bordered table-striped table-hover table-sm" id="data_barang">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -68,9 +68,9 @@
                 });
             }
 
-            var tableBarang;
+            var dataBarang;
             $(document).ready(function () {
-                tableBarang = $('#table_barang').DataTable({
+                dataBarang = $('#data_barang').DataTable({
                     serverSide: true,
                     ajax: {
                         "url": "{{ url('barang/list') }}",
@@ -134,13 +134,13 @@
                     ]
                 });
 
-                $('#table-barang_filter input').unbind().bind().on('keyup', function (e) {
+                $('#data-barang_filter input').unbind().bind().on('keyup', function (e) {
                     if (e.keyCode == 13) { // enter key
-                        tableBarang.search(this.value).draw();
+                        dataBarang.search(this.value).draw();
                     }
                 });
                 $('.filter_kategori').change(function () {
-                    tableBarang.ajax.draw();
+                    dataBarang.ajax.draw();
                 });
             });
         </script>
