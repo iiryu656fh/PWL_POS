@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
+use Barryvdh\DomPDF\Facade\PDF;
 use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yajra\DataTables\Facades\DataTables;
@@ -417,5 +418,20 @@ class BarangController extends Controller
 
         $writer->save('php://output'); // simpan file ke output
         exit; // hentikan script setelah file di download
+    }
+
+    public function export_pdf(){
+        $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+            ->orderBy('kategori_id')
+            ->with('kategori')
+            ->get();
+
+        // use Barryvdh\DOmPDF\Facade as PDF;
+        $pdf = PDF::loadView('barang.export_pdf', ['barang' => $barang]);
+        $pdf->setPaper('a4', 'portrait'); // set kertas A4 potrait
+        $pdf->setOption("isRemoteEnabled", true); // set agar bisa menampilkan gambar dari url
+        $pdf->render();
+
+        return $pdf->stream('Data Barang ' .date('Y-m-d_H-i-s').'.pdf'); // download file pdf
     }
 }
