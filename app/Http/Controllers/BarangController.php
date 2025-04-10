@@ -394,5 +394,10 @@ class BarangController extends Controller
             $no++; // increment nomor data
             $baris++; // increment baris data
         }
+
+        // set lebar kolom
+        foreach(range('A', 'F') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true); // set auto sizs untuk kolom
+        }
     }
 }
