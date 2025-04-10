@@ -130,6 +130,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', [SupplierController::class, 'destroy']); // menghapus data supplier
             Route::get('/import', [SupplierController::class, 'import']); // ajax form uplaod excel
             Route::post('/import_ajax', [SupplierController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [SupplierController::class, 'export_excel']); // ajax export excel
         });
     });
 });
