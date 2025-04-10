@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LevelController extends Controller
 {
@@ -384,5 +385,18 @@ class LevelController extends Controller
 
         $writer->save('php://output'); // simpan file ke output
         exit; // hentikan script setelah file di download
+    }
+
+    public function export_pdf()
+    {
+        // ambil data level yang akan diexport
+        $level = LevelModel::select('level_kode', 'level_nama')->get();
+
+        $pdf = PDF::loadView('level.export_pdf', ['level' => $level]);
+        $pdf->setPaper('a4', 'portrait'); // set kertas A4 potrait
+        $pdf->setOption("isRemoteEnabled", true); // set agar bisa menampilkan gambar dari url
+        $pdf->render();
+
+        return $pdf->stream('Data_Level_' . date('Y-m-d_H-i-s') . '.pdf');
     }
 }
