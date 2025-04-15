@@ -8,6 +8,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfilController;
 use App\Models\User;
 
 Route::pattern('id', '[0-9]+'); //Artinya ketika ada paremeter {id}. maka harus berupa angka
@@ -18,8 +19,18 @@ Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('register', [AuthController::class, 'register']);
 Route::post('postRegister', [AuthController::class, 'postRegister']);
 
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [WelcomeController::class, 'index']);
+    Route::group(['prefix' => 'profil'], function () {
+        Route::get('/', [ProfilController::class, 'index']); // menampilkan halaman profil
+        Route::get('/import', [ProfilController::class, 'import']); // menampilkan halaman form upload foto        
+        Route::post('/import_ajax', [ProfilController::class, 'import_ajax']); // ajax import foto
+
+    });
+
+
     Route::group(['prefix' => 'user'], function () {
         Route::middleware(['authortize:ADM'])->group(function () {
             Route::get('/', [UserController::class, 'index']); // menampilkan halaman awal user
