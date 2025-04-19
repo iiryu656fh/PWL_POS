@@ -9,6 +9,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\StokController;
 use App\Models\User;
 
 Route::pattern('id', '[0-9]+'); //Artinya ketika ada paremeter {id}. maka harus berupa angka
@@ -150,4 +151,23 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/export_pdf', [SupplierController::class, 'export_pdf']); // ajax export pdf
         });
     });
+
+    Route::group(['prefix' => 'stok'], function () {
+        Route::middleware(['authortize:ADM,MNG,STF'])->group(function () {
+            Route::get('/', [StokController::class, 'index']); // menampilkan halaman awal stok
+            Route::post('/list', [StokController::class, 'list']); // menampilkan data stok dalam bentuk json untuk datables
+            Route::get('/create_ajax', [StokController::class, 'create_ajax']); // menampilkan halaman form tambah stok
+            Route::post('/ajax', [StokController::class, 'store_ajax']); // menyimpan data stok baru
+            Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax']); // menampilkan detail stok
+            Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']); // menampilkan halaman form edit stok
+            Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']); // menyimpan data stok yang diubah
+            Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']); //untuk tampilkan form confirm delete stok ajax
+            Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']); // Untuk hapus data Stok Ajax
+            Route::delete('/{id}', [StokController::class, 'destroy']); // menghapus data stok
+            Route::get('/import', [StokController::class, 'import']); // ajax form uplaod excel
+            Route::post('/import_ajax', [StokController::class, 'import_ajax']); // ajax import excel
+            Route::get('/export_excel', [StokController::class, 'export_excel']); // ajax export excel
+            Route::get('/export_pdf', [StokController::class, 'export_pdf']); // ajax export pdf
+        });
+    }); 
 });

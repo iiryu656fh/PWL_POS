@@ -21,10 +21,10 @@
                 <div id="filter" class="form-horizontal  filter-date p-2 border-bottom mb-2">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group form-group-sm row text-sm mb-0">
-                                <label for="filter_date" class="col-1 control-label col-form-label">Filter:</label>
+                            <div class="form-group row">
+                                <label class="col-1 control-label col-form-label">Filter:</label>
                                 <div class="col-3">
-                                    <select name="filter_kategori" class="form-control form-control-sm filter_kategori">
+                                    <select name="kategori_id" class="form-control" id="kategori_id" required.>
                                         <option value="">- Semua -</option>
                                         @foreach ($kategori as $item)
                                             <option value="{{ $item->kategori_id}}">{{ $item->kategori_nama }}</option>
@@ -78,7 +78,7 @@
                         "dataType": "json",
                         "type": "POST",
                         "data": function (d) {
-                            d.kategori_id = $('.filter_kategori').val();
+                            d.kategori_id = $('#kategori_id').val();
                         }
                     },
                     columns: [
@@ -135,13 +135,8 @@
                     ]
                 });
 
-                $('#data-barang_filter input').unbind().bind().on('keyup', function (e) {
-                    if (e.keyCode == 13) { // enter key
-                        dataBarang.search(this.value).draw();
-                    }
-                });
-                $('.filter_kategori').change(function () {
-                    dataBarang.ajax.draw();
+                $('#kategori_id').on('change', function () {
+                    dataBarang.ajax.reload();
                 });
             });
         </script>
