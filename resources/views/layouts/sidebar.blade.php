@@ -15,6 +15,21 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- foto profil -->
+          <ul class="nav nav-pills nav-sidebar flex-column text-center d-none d-md-block" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <div class="image">
+                @if (Auth::user()->foto)
+                  <img src="{{ asset('storage/' . Auth::user()->foto) }}" class="img-circle elevation-2" style="width: 60px; height: 60px;" alt="User Image">
+                @else
+                  <img src="{{ asset('images/user.png') }}" class="img-circle elevation-2" style="width: 60px; height: 60px;" alt="User Image">
+                @endif
+              </div>
+            </li>
+            <li class="nav-item">
+              <span class="text-white small d-block">{{ Auth::user()->nama }}</span>
+            </li>
+          </ul>                            
           <li class="nav-item">
             <a href="{{ url('/')}}" class="nav-link {{ ($activeMenu == 'dashboard') ? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -67,7 +82,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('/barang')}}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
+            <a href="{{ url('/penjualan')}}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
               <i class="nav-icon fas fa-cash-register"></i>
               <p>Transaksi Penjualan</p>
             </a>

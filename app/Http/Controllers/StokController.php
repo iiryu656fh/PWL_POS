@@ -16,7 +16,8 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class StokController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $breadcrumb = (object) [
             'title' => 'Stok Barang',
             'list' => ['Home', 'Stok']
@@ -35,7 +36,8 @@ class StokController extends Controller
         return view('stok.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $acttiveMenu, 'supplier' => $supplier, 'barang' => $barang, 'user' => $user]);
     }
 
-    public function list(Request $request){
+    public function list(Request $request)
+    {
         $stok = StokModel::select('stok_id', 'supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')
             ->with('supplier', 'barang', 'user');
 
@@ -52,27 +54,27 @@ class StokController extends Controller
         return DataTables::of($stok)
             ->addIndexColumn()
             ->addColumn('aksi', function ($stok) {
-                $btn = '<button onclick="modalAction(\''.url('/stok/' . $stok->stok_id . '/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button>';
-                $btn .= '<button onclick="modalAction(\''.url('/stok/' . $stok->stok_id . '/edit_ajax').'\')" class="btn btn-warning btn-sm">Edit</button>';
-                $btn .= '<button onclick="modalAction(\''.url('/stok/' . $stok->stok_id . '/delete_ajax').'\')" class="btn btn-danger btn-sm">Hapus</button>';
-                return $btn; 
+                $btn = '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button>';
+                $btn .= '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button>';
+                $btn .= '<button onclick="modalAction(\'' . url('/stok/' . $stok->stok_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button>';
+                return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
     }
 
-    public function create_ajax(Request $request){
+    public function create_ajax(Request $request)
+    {
         $supplier = SupplierModel::select('supplier_id', 'supplier_nama')->get();
         $barang = BarangModel::select('barang_id', 'barang_nama')->get();
-        $user = UserModel::select('user_id', 'nama')->get();
 
         return view('stok.create_ajax')->with('supplier', $supplier)
-                                      ->with('barang', $barang)
-                                      ->with('user', $user);
+            ->with('barang', $barang);
     }
 
-    public function store_ajax(Request $request){
-        if($request->ajax() || $request->wantsJson()){  
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'supplier_id' => 'required|exists:m_supplier,supplier_id',
                 'barang_id' => 'required|exists:m_barang,barang_id',
@@ -91,20 +93,23 @@ class StokController extends Controller
             }
 
             StokModel::create($request->all());
+
             return response()->json([
                 'status' => true,
-                'message' => 'Data stok berhasil disimpan'
+                'message' => 'Data stok baru berhasil disimpan'
             ]);
         }
-        redirect('/stok');  
+        redirect('/stok');
     }
 
-    public function show_ajax(string $id){
+    public function show_ajax(string $id)
+    {
         $stok = StokModel::with('supplier', 'barang', 'user')->find($id);
         return view('stok.show_ajax', ['stok' => $stok]);
     }
 
-    public function edit_ajax(string $id){
+    public function edit_ajax(string $id)
+    {
         $stok = StokModel::find($id);
         $supplier = SupplierModel::all();
         $barang = BarangModel::all();
@@ -113,8 +118,9 @@ class StokController extends Controller
         return view('stok.edit_ajax', ['stok' => $stok, 'supplier' => $supplier, 'barang' => $barang, 'user' => $user]);
     }
 
-    public function update_ajax(Request $request, string $id){
-        if($request->ajax() || $request->wantsJson()){  
+    public function update_ajax(Request $request, string $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'supplier_id' => 'required|exists:m_supplier,supplier_id',
                 'barang_id' => 'required|exists:m_barang,barang_id',
@@ -130,7 +136,7 @@ class StokController extends Controller
                     'message' => 'Validasi Gagal',
                     'msgField' => $validator->errors(),
                 ]);
-            }            
+            }
 
             $check = StokModel::find($id);
             if ($check) {
@@ -146,10 +152,11 @@ class StokController extends Controller
                 ]);
             }
         }
-        redirect('/stok');  
+        redirect('/stok');
     }
 
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         $check = StokModel::find($id);
         if (!$check) {
             return redirect('/stok')->with('error', 'Data stok tidak ditemukan');
@@ -162,14 +169,16 @@ class StokController extends Controller
             return redirect('/stok')->with('error', 'Data stok tidak bisa dihapus karena masih digunakan pada tabel lain');
         }
     }
-    
-    public function confirm_ajax(string $id) {
+
+    public function confirm_ajax(string $id)
+    {
         $stok = StokModel::find($id);
 
         return view('stok.confirm_ajax', ['stok' => $stok]);
     }
 
-    public function delete_ajax(Request $request, $id){
+    public function delete_ajax(Request $request, $id)
+    {
         if ($request->ajax() || $request->wantsJson()) {
             $stok = StokModel::find($id);
             if (!$stok) {
@@ -178,7 +187,7 @@ class StokController extends Controller
                     'message' => 'Data tidak ditemukan'
                 ]);
             }
-    
+
             try {
                 $stok->delete();
                 return response()->json([
@@ -192,11 +201,12 @@ class StokController extends Controller
                 ]);
             }
         }
-    
+
         return redirect('/stok');
     }
 
-    public function import(){
+    public function import()
+    {
         return view('stok.import');
     }
 
@@ -233,7 +243,7 @@ class StokController extends Controller
                             // fallback kalau ternyata berupa string
                             $tanggal = date('Y-m-d H:i:s', strtotime($tanggal_excel));
                         }
-                
+
                         $insert[] = [
                             'supplier_id' => $value['A'],
                             'barang_id' => $value['B'],
@@ -293,16 +303,16 @@ class StokController extends Controller
             $sheet->setCellValue('C' . $baris, $value->stok_jumlah);
             $sheet->setCellValue('D' . $baris, $value->supplier->supplier_nama);
             $sheet->setCellValue('E' . $baris, $value->user->nama);
-        
+
             // Format datetime ke format Excel + styling datetime
             $excelDateTime = Date::PHPToExcel(new \DateTime($value->stok_tanggal));
             $sheet->setCellValue('F' . $baris, $excelDateTime);
             $sheet->getStyle('F' . $baris)->getNumberFormat()->setFormatCode('yyyy-mm-dd hh:mm:ss');
-        
+
             $baris++;
             $no++;
         }
-        
+
 
         foreach (range('A', 'F') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true); // set auto size untuk kolom
@@ -326,7 +336,8 @@ class StokController extends Controller
         exit;
     }
 
-    public function export_pdf(){
+    public function export_pdf()
+    {
         $stok = StokModel::select('supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')
             ->orderBy('supplier_id')
             ->with('supplier', 'barang', 'user')

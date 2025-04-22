@@ -46,27 +46,28 @@
                             <option value="">- Pilih Barang -</option>
                             @foreach ($barang as $b)
                                 <option {{ ($b->barang_id == $stok->barang_id) ? 'selected' : ''}} value="{{ $b->barang_id }}">
-                                    {{ $b->barang_nama }}</option>
+                                    {{ $b->barang_nama }}
+                                </option>
                             @endforeach
                         </select>
                         <small id="error-barang_id" class="error-text form-text text-danger"></small>
                     </div>
+                    @php
+                        $userLogin = Auth::user();
+                        $now = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+                    @endphp
+
+                    <input type="hidden" name="user_id" value="{{ $userLogin->user_id }}">
                     <div class="form-group">
                         <label>User</label>
-                        <select name="user_id" id="user_id" class="form-control" required>
-                            <option value="">- Pilih User -</option>
-                            @foreach ($user as $u)
-                                <option {{ ($u->user_id == $stok->user_id) ? 'selected' : ''}} value="{{ $u->user_id }}">
-                                    {{ $u->nama }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" value="{{ $userLogin->nama }}" readonly>
                         <small id="error-user_id" class="error-text form-text text-danger"></small>
                     </div>
+
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input value="{{ $stok->stok_tanggal }}" type="datetime-local" name="stok_tanggal" id="stok_tanggal"
-                            class="form-control" required>
-                        <small id="error-stok_tanggal" class="error-text form-text text-danger"></small>
+                        <input type="datetime-local" name="stok_tanggal" id="stok_tanggal" class="form-control"
+                            value="{{ $now }}" readonly>
                     </div>
                     <div class="form-group">
                         <label>Jumlah</label>
