@@ -149,71 +149,59 @@ class PenjualanController extends Controller
 
     public function update_ajax(Request $request, string $id)
     {
-        if ($request->ajax() || $request->wantsJson()) {
-            $rules = [
-                'user_id' => auth()->user()->user_id,
-                'penjualan_kode' => 'required|string|unique:t_penjualan,penjualan_kode,' . $id . ',penjualan_id',
-                'pembeli' => 'required|string',
-                'penjualan_tanggal' => 'required|date',
-                'barang_id' => 'required|array|min:1',
-                'barang_id.*' => 'required|exists:m_barang,barang_id',
-                'jumlah' => 'required|array',
-                'jumlah.*' => 'required|integer|min:1',
-                'harga' => 'required|array',
-                'harga.*' => 'required|numeric|min:0',
-            ];
-
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validasi Gagal',
-                    'msgField' => $validator->errors(),
-                ]);
-            }
-            try {
-                $penjualan = PenjualanModel::find($id);
-
-                if (!$penjualan) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Data penjualan tidak ditemukan'
-                    ]);
-                }
-                $penjualan->update([
-                    'user_id' => auth()->user()->user_id,
-                    'penjualan_kode' => $request->penjualan_kode,
-                    'pembeli' => $request->pembeli,
-                    'penjualan_tanggal' => $request->penjualan_tanggal,
-                ]);
-                // hapus detail penjualan
-                $penjualan->penjualan_detail()->delete();
-                // simpan detail penjualan
-                $dataDetail = [];
-                foreach ($request->barang_id as $i => $barang_id) {
-                    $dataDetail[] = new PenjualanDetailModel([
-                        'barang_id' => $barang_id,
-                        'harga' => $request->harga[$i],
-                        'jumlah' => $request->jumlah[$i],
-                        'penjualan_id' => $penjualan->penjualan_id,
-                    ]);
-                }
-
-                // simpan relasi detail sekaligus
-                $penjualan->penjualan_detail()->saveMany($dataDetail);
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Data penjualan dan detail berhasil diupdate',
-                ]);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Gagal memperbarui data. ' . $e->getMessage(),
-                ]);
-            }
+        if (!($request->ajax() || $request->wantsJson())) {
+            return redirect('/penjualan');
         }
-        return redirect('/penjualan');
+        $request->validate([
+            'user_id' => 'required|exists:m_user,user_id',
+            'pembeli' => 'required|string',
+            'penjualan_tanggal' => 'required|date',
+            'barang_id' => 'required|array|min:1',
+            'barang_id.*' => 'required|exists:m_barang,barang_id',
+            'jumlah' => 'required|array',
+            'jumlah.*' => 'required|integer|min:1',
+            'harga' => 'required|array',
+            'harga.*' => 'required|numeric|min:0',
+        ]);
+        
+        try {
+            $penjualan = PenjualanModel::find($id);
+            if (!$penjualan) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data penjualan tidak ditemukan'
+                ]);
+            }
+            $penjualan->update([
+                'user_id' => $request->user_id,
+                'pembeli' => $request->pembeli,
+                'penjualan_tanggal' => $request->penjualan_tanggal,
+            ]);
+
+            //hapus semua detail sebelumnya lalu tambah ulang
+            $penjualan->penjualan_detail()->delete();
+            $dataDetail = [];
+            foreach ($request->barang_id as $i => $barang_id) {
+                $dataDetail[] = new PenjualanDetailModel([
+                    'barang_id' => $barang_id,
+                    'harga' => $request->harga[$i],
+                    'jumlah' => $request->jumlah[$i],
+                    'penjualan_id' => $penjualan->penjualan_id,
+                ]);
+            }
+            // simpan relasi detail sekaligus
+            $penjualan->penjualan_detail()->saveMany($dataDetail);
+            return response()->json([
+                'status' => true,
+                'message' => 'Data penjualan dan detail berhasil diupdate',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat mengupdate data penjualan dan detail',
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function destroy(string $id)

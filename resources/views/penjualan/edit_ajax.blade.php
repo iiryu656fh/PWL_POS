@@ -29,6 +29,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+
                     @php
                         $userLogin = Auth::user();
                         $now = \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
@@ -42,7 +43,7 @@
                     <div class="form-group">
                         <label>Kode Penjualan</label>
                         <input value="{{ $penjualan->penjualan_kode }}" type="text" name="penjualan_kode"
-                            id="penjualan_kode" class="form-control" required>
+                            id="penjualan_kode" class="form-control" readonly>
                         <small id="error-penjualan_kode" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
@@ -53,7 +54,7 @@
                     </div>
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input value="{{ $penjualan->penjualan_tanggal }}" type="datetime-local" name="penjualan_tanggal"
+                        <input value="{{ $now }}" type="datetime-local" name="penjualan_tanggal"
                             id="penjualan_tanggal" class="form-control" required>
                         <small id="error-penjualan_tanggal" class="error-text form-text text-danger"></small>
                     </div>
@@ -121,6 +122,7 @@
     <script>
         $(document).ready(function () {
 
+            
             // langsung add
             $('#table-barang tbody tr').each(function() {
                 hitungSubtotal($(this));
@@ -198,6 +200,8 @@
                                 text: res.message,
                             }).then(() => {
                                 dataPenjualan.ajax.reload(); // atau reset form
+                                // Close the modal
+                                $('#myModal').modal('hide');
                             });
                         } else {
                             Swal.fire({
